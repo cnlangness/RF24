@@ -78,8 +78,12 @@ function detect_machine {
     case $hardware in
     BCM2708|BCM2835)
         soc="BCM2835"
-        if [[ $machine == "Raspberry"* ]]; then
+        if [[ $machine == "Raspberry Pi Model"* ]]; then
             tp="RPi"
+		elif [[ $machine == "Raspberry Pi 2"* ]]; then
+            tp="RPi2"
+		elif [[ $machine == "Raspberry Pi 3"* ]]; then
+            tp="RPi3"
         fi
         ;;
     BCM2709)
@@ -146,9 +150,16 @@ function detect_machine {
 
 function gcc_cpu_flags {
     local soc=$1
+	local type=$2
     case $soc in
     BCM2835)
-        flags="-march=armv6zk -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard"
+		if [[ $type == "RPi" ]]; then
+			flags="-march=armv6zk -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard"
+		elif [[ $type == "RPi2" ]]; then
+			flage="-mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4"
+		elif [[ $type == "RPi3" ]]; then
+			flags="-mcpu=cortex-a53 -mfloat-abi=hard -mfpu=neon-fp-armv8 -mneon-for-64bits"
+		fi
         ;;
     BCM2836)
         flags="-march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard"
@@ -381,7 +392,7 @@ if [ -z "${SOC}" ]; then
 fi
 
 if [ -z "${CPUFLAGS}" ]; then
-    CPUFLAGS=$(gcc_cpu_flags $SOC)
+    CPUFLAGS=$(gcc_cpu_flags $SOC $TYPE)
 fi
 
 
