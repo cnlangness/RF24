@@ -156,7 +156,7 @@ function gcc_cpu_flags {
 		if [[ $type == "RPi" ]]; then
 			flags="-march=armv6zk -mtune=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard"
 		elif [[ $type == "RPi2" ]]; then
-			flage="-mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4"
+			flags="-mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4"
 		elif [[ $type == "RPi3" ]]; then
 			flags="-mcpu=cortex-a53 -mfloat-abi=hard -mfpu=neon-fp-armv8 -mneon-for-64bits"
 		fi
